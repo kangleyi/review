@@ -3,6 +3,7 @@
 <mapper namespace="cn.edu.review.mapper.MovieMapper" >
   <resultMap id="BaseResultMap" type="cn.edu.review.bean.Movie" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="years" property="years" jdbcType="VARCHAR" />
     <result column="director" property="director" jdbcType="VARCHAR" />
@@ -12,7 +13,7 @@
     <result column="flag" property="flag"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, type, years, director, actor, img, remark
+    id, name,type, years, director, actor, img, remark
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -27,6 +28,7 @@
     from movie
     <where>
       flag=0
+      <if test="name!=null and name!='' ">and name like concat("%",#{name},"%")</if>
       <if test="type!=null and type!='' ">and type like concat("%",#{type},"%")</if>
       <if test="years!=null and years!='' ">and years like concat("%",#{years},"%")</if>
       <if test="director!=null and director!='' ">and director like concat("%",#{director},"%")</if>
@@ -39,19 +41,15 @@
     delete from movie
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.edu.review.bean.Movie" >
-    insert into movie (id, type, years, 
-      director, actor, img, 
-      remark)
-    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{years,jdbcType=VARCHAR}, 
-      #{director,jdbcType=VARCHAR}, #{actor,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR})
-  </insert>
+
   <insert id="insertSelective" parameterType="cn.edu.review.bean.Movie" >
     insert into movie
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="name != null" >
+        name,
       </if>
       <if test="type != null" >
         type,
@@ -76,6 +74,9 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
       <if test="type != null" >
         #{type,jdbcType=VARCHAR},
       </if>
@@ -99,6 +100,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.review.bean.Movie" >
     update movie
     <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
       <if test="type != null" >
         type = #{type,jdbcType=VARCHAR},
       </if>
@@ -121,16 +125,6 @@
         flag = #{flag},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.review.bean.Movie" >
-    update movie
-    set type = #{type,jdbcType=VARCHAR},
-      years = #{years,jdbcType=VARCHAR},
-      director = #{director,jdbcType=VARCHAR},
-      actor = #{actor,jdbcType=VARCHAR},
-      img = #{img,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

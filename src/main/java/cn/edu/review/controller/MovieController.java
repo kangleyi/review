@@ -47,7 +47,7 @@ public class MovieController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            movie.setImg("/src/media/big/"+filename+"."+Extname);
+            movie.setImg("src/"+filename+"."+Extname);
         }
         return Result.Success(movieService.save(movie));
     }

@@ -16,8 +16,8 @@ public class UserController {
 
     @RequestMapping("/login")
     public Result login(User user){
-        user=userService.login(user);
         user.setPassword(MD5Util.encodeByMD5(user.getPassword()));
+        user=userService.login(user);
         if(user!=null){
             if(user.getDelFlag()==1){
                 return Result.Error("Forbid login");
