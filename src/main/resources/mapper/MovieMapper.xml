@@ -27,7 +27,11 @@
     from movie
     <where>
       flag=0
-      <if test=""></if>
+      <if test="type!=null and type!='' ">and type like concat("%",#{type},"%")</if>
+      <if test="years!=null and years!='' ">and years like concat("%",#{years},"%")</if>
+      <if test="director!=null and director!='' ">and director like concat("%",#{director},"%")</if>
+      <if test="actor!=null and actor!='' ">and actor like concat("%",#{actor},"%")</if>
+      <if test="remark!=null and remark!='' ">and remark like concat("%",#{remark},"%")</if>
     </where>
   </select>
 

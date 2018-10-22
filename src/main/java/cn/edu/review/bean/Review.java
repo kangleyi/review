@@ -9,13 +9,43 @@ public class Review {
 
     private String content;
 
-    private String createId;
+    private Integer createId;
 
     private Date createTime;
+
+    private String createName;
 
     private String delFlag;
 
     private Integer isPass;
+
+    private Integer userId;
+
+    private Integer type;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getId() {
         return id;
@@ -41,11 +71,11 @@ public class Review {
         this.content = content;
     }
 
-    public String getCreateId() {
+    public Integer getCreateId() {
         return createId;
     }
 
-    public void setCreateId(String createId) {
+    public void setCreateId(Integer createId) {
         this.createId = createId;
     }
 

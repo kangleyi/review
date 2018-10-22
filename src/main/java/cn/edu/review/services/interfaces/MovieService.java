@@ -7,7 +7,7 @@ import java.util.List;
 public interface MovieService {
     List<Movie> queryAll(Movie movie);
 
-    int edit(Movie movie);
+    int save(Movie movie);
 
     Movie get(Integer id);
 }

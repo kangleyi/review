@@ -16,4 +16,6 @@ public interface UserService {
     int edit(User user);
 
     List<User> queryAll(User user);
+
+    User get(Integer id);
 }

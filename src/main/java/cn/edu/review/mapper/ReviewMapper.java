@@ -2,6 +2,8 @@ package cn.edu.review.mapper;
 
 import cn.edu.review.bean.Review;
 
+import java.util.List;
+
 public interface ReviewMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface ReviewMapper {
     int updateByPrimaryKeySelective(Review record);
 
     int updateByPrimaryKey(Review record);
+
+    List<Review> query(Review review);
 }

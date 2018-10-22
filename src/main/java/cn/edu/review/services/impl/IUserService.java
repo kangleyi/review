@@ -43,4 +43,9 @@ public class IUserService implements UserService {
     public List<User> queryAll(User user) {
         return userMapper.query(user);
     }
+
+    @Override
+    public User get(Integer id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
 }

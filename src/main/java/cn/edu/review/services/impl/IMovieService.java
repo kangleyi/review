@@ -20,7 +20,7 @@ public class IMovieService implements MovieService {
     }
 
     @Override
-    public int edit(Movie movie) {
+    public int save(Movie movie) {
         if(movie.getId()!=null)
         return movieMapper.updateByPrimaryKeySelective(movie);
         return movieMapper.insertSelective(movie);

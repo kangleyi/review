@@ -5,10 +5,12 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="movie_id" property="movieId" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
     <result column="is_pass" property="isPass" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, movie_id, content, create_id, create_time, del_flag, is_pass
@@ -28,9 +30,32 @@
       create_id, create_time, del_flag, 
       is_pass)
     values (#{id,jdbcType=INTEGER}, #{movieId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
-      #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR},
       #{isPass,jdbcType=INTEGER})
   </insert>
+
+  <select id="query" resultMap="BaseResultMap">
+    select
+    r.*,
+    u.nick create_name
+    <if test="userId!=null">
+      ,re.type
+    </if>
+    from
+      review r
+    left join user u on r.create_id=u.id
+    <if test="userId!=null">
+    left join reply re on re.review_id=r.id and re.create_id=#{userId}
+    </if>
+    <where>
+      r.del_flag=0
+      <if test="movieId!=null">and movie_id=#{movieId}</if>
+      <if test="isPass!=null">and is_pass=#{isPass}</if>
+      <if test="createName!=null and createName!='' ">and u.nick like concat("%",#{createName},"%")</if>
+    </where>
+    group by r.id
+  </select>
+
   <insert id="insertSelective" parameterType="cn.edu.review.bean.Review" >
     insert into review
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -90,7 +115,7 @@
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="createId != null" >
-        create_id = #{createId,jdbcType=VARCHAR},
+        create_id = #{createId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -108,7 +133,7 @@
     update review
     set movie_id = #{movieId,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=VARCHAR},
       is_pass = #{isPass,jdbcType=INTEGER}
