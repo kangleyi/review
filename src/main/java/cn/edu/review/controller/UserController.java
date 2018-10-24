@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -15,13 +17,14 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("/login")
-    public Result login(User user){
+    public Result login(User user, HttpSession session){
         user.setPassword(MD5Util.encodeByMD5(user.getPassword()));
         user=userService.login(user);
         if(user!=null){
             if(user.getDelFlag()==1){
                 return Result.Error("Forbid login");
             }else{
+                session.setAttribute("user",user);
                 return Result.Success(user);
             }
         }

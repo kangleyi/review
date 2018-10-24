@@ -11,6 +11,8 @@
     <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
     <result column="is_pass" property="isPass" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="INTEGER" />
+    <result column="img" property="img" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, movie_id, content, create_id, create_time, del_flag, is_pass
@@ -37,13 +39,16 @@
   <select id="query" resultMap="BaseResultMap">
     select
     r.*,
-    u.nick create_name
+    u.nick create_name,
+    name,
+    img
     <if test="userId!=null">
       ,re.type
     </if>
     from
       review r
     left join user u on r.create_id=u.id
+    left join movie m on m.id=r.movie_id
     <if test="userId!=null">
     left join reply re on re.review_id=r.id and re.create_id=#{userId}
     </if>

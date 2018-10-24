@@ -35,7 +35,7 @@ public class MovieController {
 
     @RequestMapping("/save")
     public Result save(Movie movie, MultipartFile file, HttpServletRequest request){
-        if(file!=null){
+        if(file!=null&&file.getSize()>0){
             String filename=UUID.randomUUID().toString();
             String fileName=file.getOriginalFilename();
             String Extname=fileName.substring(fileName.lastIndexOf(".")+1);
