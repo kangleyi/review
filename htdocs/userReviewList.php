@@ -19,7 +19,7 @@
 							<a href="javascript:;">数据列表</a>
 						</li>
 						<li >
-							<a href="javascript:;" onclick="" >添加评论</a>
+							<a href="javascript:;" onclick="review()" >添加评论</a>
 						</li>
 						<li >
 							<a href="/userMovies.php"  >返回</a>
@@ -41,6 +41,7 @@
 					}
 					$createName=isset($_POST['createName'])?$_POST['createName']:"";
 					$id=isset($_POST['id'])?$_POST['id']:$_GET['id'];
+					$userId=isset($_POST['userId'])?$_POST['userId']:-1;
 					$baseurl="http://localhost:8080/review";
 					function send_post($url,$post_data) {
 					    global $baseurl;
@@ -70,6 +71,7 @@
 								echo "<div style='text-align:center;font-size:20px'><span>".array_values($moives)[0]['name']."</span><br/><img src=".$baseurl.array_values($moives)[0]['img']." /></div>";
 								echo '<form id="ff" action="userReviewList.php" method="post">';
 								echo '	<input type="hidden" name="id" value="'.$id.'" />';
+								echo '	<input type="hidden" name="userId" value="'.$$userId.'" />';
 								echo '	评论人：<input class="input-medium search-query" type="text" name="createName" value="'.$createName.'" /><button  type="submit" class="btn">查找</button></form>';
 								print <<<EOT
 									<table class="table" style="text-align: center" id="alternatecolor">
@@ -99,7 +101,11 @@ EOT;
 									echo '<td>'.$value['createName']."</td>"; 
 									echo '<td>'.microtime_format("Y/m/d H:i:s",$value['createTime']/1000)."</td>"; 
 									echo '<td>'.$value['content']."</td>"; 
-									echo '<td>'.$value['content']."</td>"; 
+									echo '<td><select name="reply" id="reply" ><option value="-1">请选择</option><option value="1"';
+									if($value['type']==1){
+
+									}
+									echo '>有用</option><option value="2";>中</option><option value="3">无用</option></select></td>';
 									if($_SESSION['id']==$value['createName']){
 										echo '<td><a href="javascript:;" onclick="deletes('.$value['id'].')" >删除</a></td>';
 									}else{
@@ -116,5 +122,27 @@ EOT;
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			function deletes(id) {
+				$.get("http://localhost:8080/review/movie/review?id="+id+"&delFlag=1",function(r){
+                    if(r.code==200){
+                        alert("Opterate success!");
+                        $("#ff").submit();
+                    }
+                })
+			}
+			function review() {
+				var b = window.prompt("请输入您的评论","");
+				if(b!=null||b!=''){
+					$.post("http://localhost:8080/review/movie/review",{"movieId":$("movieId").val(),"userId":$("userId"),"content":b},function(r){
+	                    if(r.code==200){
+	                        alert("Opterate success!");
+	                        $("#ff").submit();
+	                    }
+                	})
+				}else{
+					alert("您未输入内容！");
+				}
+		</script>
 	</body>
 </html>
